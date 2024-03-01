@@ -17,12 +17,12 @@ typedef struct {
 } Move;
 
 Move* stack = NULL; // Pointer is added to mark position for the stack.
-int top = -1; // This is to identify the top of the stack. 
+int count = -1; // This is to identify the count of the stack. 
 
 void push(Move location) {
-    if (top < MAX_SIZE - 1) { // Checks if stack is not full
-        top++;
-        stack[top] = location; // Add location to the top of stack
+    if (count < MAX_SIZE - 1) { // Checks if stack is not full
+        count++;
+        stack[count] = location; // Add location to the count of stack
     }
 }
 
@@ -116,7 +116,7 @@ int searchPath(char** arr, char* word, int row, int col) {
                 return 1;
             }
             // In case path ends, we need to backtrack to initial position
-            top--;
+            count--;
         }
     }
     return 0;
@@ -136,8 +136,28 @@ void searchPuzzle(char** arr, char* word) { // parameter points to an aray of po
         for (int j = 0; j < bSize; j++) {
             if ((*(*arr + i) + j) == *word) {
                 initializeMemory();
-                top = -1;
+                count = -1;
+            
+                if (searchPath(arr, word, i, j)) {
+                    printf("\nPrinting the search path:\n");
+
+                    for (int k = 0; k <= count; k++) {
+                        printf("%d %d ", stack[k].row, stack[k].col);
+                    }
+
+                    printf("\n");
+                    printf("Word found!\n");
+
+                    valueFound = 1;
+                    break;
+                }
             }
         }
+        if (valueFound) {
+            break;
+        }
+    }
+    if (!valueFound) {
+        printf("Word not found.\n");
     }
 }
