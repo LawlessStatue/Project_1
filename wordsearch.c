@@ -26,10 +26,6 @@ void push(Move location) {
     }
 }
 
-void initializeMemory() {
-    stack = (Move*)malloc(MAX_SIZE * sizeof(Move));
-}
-
 // Main function, DO NOT MODIFY 	
 int main(int argc, char **argv) {
     if (argc != 2) {
@@ -88,22 +84,25 @@ void printPuzzle(char** arr) {  //** means pointer to a pointer, FUTURE REFERENC
     }
 }
 
-void toUpperCase(char* word) {
-    while (*word) {
-        if (*(word) >= 'a' && *(word) <= 'z') {
-            *(word) = *(word) - ('a' + 'A');
+void toUpperCase(char *word) {
+    while(*word) {
+        if (*word >= 'a' && *word <= 'z') {
+            *word = *word - 'a' + 'A';
         }
+        word++; 
     }
 }
 
 int searchPath(char** arr, char* word, int row, int col) {
     //If the word has been matched, return true
+
     if (*word == '\0') {
         return 1;
     }
     //check if the cell we are in is within the puzzle. 
     if (row < bSize && row >= 0 && col < bSize && col >= 0) {
-        if ((*(*arr + row) + col) == *word) { // checks if our current row and col coordinates are equal to word chars
+        
+        if (*(*(arr + row) + col) == *word) { // checks if our current row and col coordinates are equal to word chars
             // we are reassigning our position of the Move stack to a new coordinate/cell within the puzzle
             Move location = {row, col}; // these are not square brackets, OK ?
             push(location);
@@ -128,21 +127,21 @@ void searchPuzzle(char** arr, char* word) { // parameter points to an aray of po
     // as shown in the sample runs. If not found, it will print a 
     // different message as shown in the sample runs.
     toUpperCase(word);
-    
+
     int valueFound = 0;
 
     // Iterate through each cell of the array grid to search common elements
     for (int i = 0; i < bSize; i++) {
+        *(arr + i) = (char*)malloc(bSize * sizeof(char));
         for (int j = 0; j < bSize; j++) {
-            if ((*(*arr + i) + j) == *word) {
-                initializeMemory();
+            if ((*(*(arr + i) + j)) == *word) {
                 count = -1;
             
                 if (searchPath(arr, word, i, j)) {
                     printf("\nPrinting the search path:\n");
 
                     for (int k = 0; k <= count; k++) {
-                        printf("%d %d ", stack[k].row, stack[k].col);
+                        printf("%d %d ", (stack + k)->row, (stack + k)->col); // This sets each individual cell for checking
                     }
 
                     printf("\n");
