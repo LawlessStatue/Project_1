@@ -8,23 +8,25 @@
 void printPuzzle(char** arr);
 void searchPuzzle(char** arr, char* word);
 void toUpperCase(char* word);
-int searchPath(char** arr, char* word, int row, int col);
+void initializePath();
+void createPath(int x, int y);
+void theGreatReset();
+void finalSearchPath();
+void directionsAroundChar(char** arr, char* word, int x, int y);
+void directionsReverseChar(char** arr, char* word, int x, int y);
+
+// Realized that recursively checking with one conditional was not going to work
+// Had to restart work in terms of interative conditional letter checking
+
 int bSize;
+int **searchPath;
+int startingX = -1;
+int startingY = -1;
+int initialX = 0;
+int initialY = 0;
 
-typedef struct {
-    int row;
-    int col;
-} Move;
-
-Move* stack = NULL; // Pointer is added to mark position for the stack.
-int count = -1; // This is to identify the count of the stack. 
-
-void push(Move location) {
-    if (count < MAX_SIZE - 1) { // Checks if stack is not full
-        count++;
-        stack[count] = location; // Add location to the count of stack
-    }
-}
+int wordFound = 0; // determines if wordFound is true or not, initial false.
+int count = 0; // Checks letter count
 
 // Main function, DO NOT MODIFY 	
 int main(int argc, char **argv) {
@@ -82,43 +84,15 @@ void printPuzzle(char** arr) {  //** means pointer to a pointer, FUTURE REFERENC
         }
         printf("\n"); 
     }
+    printf("\n");
 }
 
 void toUpperCase(char *word) {
-    while(*word) {
-        if (*word >= 'a' && *word <= 'z') {
-            *word = *word - 'a' + 'A';
-        }
-        word++; 
-    }
-}
-
-int searchPath(char** arr, char* word, int row, int col) {
-    //If the word has been matched, return true
-
-    if (*word == '\0') {
-        return 1;
-    }
-    //check if the cell we are in is within the puzzle. 
-    if (row < bSize && row >= 0 && col < bSize && col >= 0) {
-        
-        if (*(*(arr + row) + col) == *word) { // checks if our current row and col coordinates are equal to word chars
-            // we are reassigning our position of the Move stack to a new coordinate/cell within the puzzle
-            Move location = {row, col}; // these are not square brackets, OK ?
-            push(location);
-            
-            // have the cell recursively check through each direction for the next character. 
-            if (searchPath(arr, word + 1, row + 1, col) || searchPath(arr, word + 1, row - 1, col) ||
-            searchPath(arr, word + 1, row, col + 1) || searchPath(arr, word + 1, row, col - 1) || 
-            searchPath(arr, word + 1, row - 1, col - 1) || searchPath(arr, word + 1, row - 1, col + 1) ||
-            searchPath(arr, word + 1, row + 1, col - 1) || searchPath(arr, word + 1, row + 1, col + 1)) {
-                return 1;
-            }
-            // In case path ends, we need to backtrack to initial position
-            count--;
+    for (int i = 0; *(word + i) != '\0'; i++) {
+        if (*(word + i) >= 'a' && *(word + i) <= 'z') {
+            *(word + i) = *(word + i) - 32;
         }
     }
-    return 0;
 }
 
 void searchPuzzle(char** arr, char* word) { // parameter points to an aray of pointers, as well as uses the word that user gives.
@@ -136,20 +110,6 @@ void searchPuzzle(char** arr, char* word) { // parameter points to an aray of po
         for (int j = 0; j < bSize; j++) {
             if ((*(*(arr + i) + j)) == *word) {
                 count = -1;
-            
-                if (searchPath(arr, word, i, j)) {
-                    printf("\nPrinting the search path:\n");
-
-                    for (int k = 0; k <= count; k++) {
-                        printf("%d %d ", (stack + k)->row, (stack + k)->col); // This sets each individual cell for checking
-                    }
-
-                    printf("\n");
-                    printf("Word found!\n");
-
-                    valueFound = 1;
-                    break;
-                }
             }
         }
         if (valueFound) {
