@@ -92,6 +92,7 @@ void toUpperCase(char *word) {
         if (*(word + i) >= 'a' && *(word + i) <= 'z') {
             *(word + i) = *(word + i) - 32;
         }
+        
     }
 }
 
