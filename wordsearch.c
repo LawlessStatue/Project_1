@@ -12,8 +12,9 @@ void initializePath();
 void createPath(int x, int y);
 void theGreatReset();
 void finalSearchPath();
-void directionsAroundChar(char** arr, char* word, int x, int y);
-void directionsReverseChar(char** arr, char* word, int x, int y);
+void directionsAroundChar(char** arr, char* word, int row, int col);
+void directionsReverseChar(char** arr, char* word, int row, int col);
+void startingLetter(char** arr, char* word, int row, int col);
 
 // Realized that recursively checking with one conditional was not going to work
 // Had to restart work in terms of interative conditional letter checking
@@ -96,6 +97,111 @@ void toUpperCase(char *word) {
     }
 }
 
+void startingLetter(char** arr, char* word, int row, int col) {
+    if (startingX == -1 && startingY == -1) {
+        for (int i = 0; i < bSize; i++) {
+            for (int  j = 0; j < bSize; j++) {
+                if (*(word) == *(*(arr + i) + j)) {
+                    startingX = j;
+                    startingY = i;
+
+                    initialX = j;
+                    initialY = i;
+
+                    wordFound++;
+                    break;
+                }
+                if (i == bSize - 1 && j == bSize - 1) {
+                    wordFound = 0;
+                }
+            }
+            if (wordFound > 0) {
+                break;
+            }
+        }
+
+        if (*(word) == *(*(arr + initialY) + initialX)) {
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, row, col);
+        }
+    }
+
+    else { 
+        int row = startingX + 1;
+        int col = startingY;
+
+        while (row != bSize) {
+            if (col == bSize) {
+                col = 0;
+                row++;
+            }
+            if (*(word) == *(*(arr + row) + col)) {
+                startingX = col;
+                startingY = row;
+
+                initialX = col;
+                initialY = row;
+                wordFound++;
+
+                break;
+            } 
+            row++;   
+        }
+        if (*(word) == *(*(arr + initialY) + initialX)) {
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, row, col);
+        }
+        else {
+            wordFound = 0;
+        }
+    }
+}
+
+void createPath(int x, int y) { // creates a makrer if a letter has been found. 
+    int total = *(*(searchPath + y) + x);
+    int temp = 1;
+    count++;
+
+    for (int i = 0; i < 100; i++) {
+        if (temp < total) {
+            temp *= 10;
+        }
+        else if (temp > total) {
+            total = temp * count + total;
+            break;
+        }
+    }
+    *(*(searchPath + y) + x) = total;
+}
+
+void theGreatReset() {
+
+} 
+void finalSearchPath() {
+
+}
+
+void directionsAroundChar(char** arr, char* word, int row, int col) {
+
+} 
+
+void directionsReverseChar(char** arr, char* word, int row, int col) {
+
+}
+
+void initializePath() {
+    searchPath = (int**)malloc(bSize * sizeof(int));
+    for (int i = 0; i < bSize; i++) {
+        *(searchPath + i) = (int*)malloc(bSize * sizeof(int));
+    }
+
+    for (int i = 0; i < bSize; i++) {
+        for (int j = 0; j < bSize; j++) {
+            *(*(searchPath + i) + j) = 0;
+        }
+    }
+}
+
 void searchPuzzle(char** arr, char* word) { // parameter points to an aray of pointers, as well as uses the word that user gives.
     // This function checks if arr contains the search word. If the 
     // word appears in arr, it will print out a message and the path 
@@ -103,7 +209,7 @@ void searchPuzzle(char** arr, char* word) { // parameter points to an aray of po
     // different message as shown in the sample runs.
     toUpperCase(word);
 
-    int valueFound = 0;
+    initializePath();
 
     // Iterate through each cell of the array grid to search common elements
     for (int i = 0; i < bSize; i++) {
@@ -113,11 +219,5 @@ void searchPuzzle(char** arr, char* word) { // parameter points to an aray of po
                 count = -1;
             }
         }
-        if (valueFound) {
-            break;
-        }
-    }
-    if (!valueFound) {
-        printf("Word not found.\n");
     }
 }
