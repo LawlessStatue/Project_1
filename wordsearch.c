@@ -96,7 +96,7 @@ void toUpperCase(char *word) {
         
     }
 }
-
+// searches for the starting letter of the word if it exists...
 void startingLetter(char** arr, char* word, int row, int col) {
     if (startingX == -1 && startingY == -1) {
         for (int i = 0; i < bSize; i++) {
@@ -175,22 +175,31 @@ void createPath(int x, int y) { // creates a makrer if a letter has been found.
 }
 
 void theGreatReset() {
-
+    for (int i = 0; i < bSize; i++) {
+        for (int j = 0; j < bSize; j++) {
+            *(*(searchPath + i) + j) = 0;
+        }
+    }
+    startingX = initialX;
+    startingY = initialY;
+    wordFound = 0;
+    count = 0;
 } 
+
 void finalSearchPath() {
 
 }
 
-void directionsAroundChar(char** arr, char* word, int row, int col) {
+void directionsAroundChar(char** arr, char* word, int row, int col) { // checks around chars
 
 } 
 
-void directionsReverseChar(char** arr, char* word, int row, int col) {
+void directionsReverseChar(char** arr, char* word, int row, int col) { // checks backtracking route and around chars
 
 }
 
 void initializePath() {
-    searchPath = (int**)malloc(bSize * sizeof(int));
+    searchPath = (int**)malloc(bSize * sizeof(int*));
     for (int i = 0; i < bSize; i++) {
         *(searchPath + i) = (int*)malloc(bSize * sizeof(int));
     }
