@@ -174,6 +174,10 @@ void createPath(int x, int y) { // creates a makrer if a letter has been found.
     *(*(searchPath + y) + x) = total;
 }
 
+void finalSearchPath() {
+    char* c = (char*)malloc(strlen(c) + 1);
+}
+
 void theGreatReset() {
     for (int i = 0; i < bSize; i++) {
         for (int j = 0; j < bSize; j++) {
@@ -186,13 +190,11 @@ void theGreatReset() {
     count = 0;
 } 
 
-void finalSearchPath() {
-    char* c = (char*)malloc(strlen(c) + 1);
-}
+
 
 void directionsAroundChar(char** arr, char* word, int row, int col) { // checks around chars
     if (startingX - 1 >= 0 && startingY - 1 >= 0 && *(word) != '\0') { // CHECKS TOPLEFT MOST POSITION
-        if (*(word) == *(*(arr + startingY - 1) + startingX - 1)) {
+        if (*(word) == *(*(arr + (startingY - 1)) + (startingX - 1))) {
             startingY--;
             startingX--;
             createPath(startingX, startingY);
@@ -201,7 +203,7 @@ void directionsAroundChar(char** arr, char* word, int row, int col) { // checks 
     }
 
     if (startingX + 1 < bSize && startingY - 1 >= 0 && *(word) != '\0') { // CHECKS TOPRIGHT MOST POSITION
-        if (*(word) == *(*(arr + startingY - 1) + (startingX + 1))) {
+        if (*(word) == *(*(arr + (startingY - 1)) + (startingX + 1))) {
             startingY--;
             startingX++;
             createPath(startingX, startingY);
@@ -210,7 +212,7 @@ void directionsAroundChar(char** arr, char* word, int row, int col) { // checks 
     }
 
     if (startingY - 1 >= 0 && *(word) != '\0') { // CHECKS TOP MOST POSITION
-        if (*(word) == *(*(arr + startingY - 1) + startingX)) {
+        if (*(word) == *(*(arr + (startingY - 1)) + startingX)) {
             startingY--;
             createPath(startingX, startingY);
             directionsAroundChar(arr, word, startingX, startingY);
@@ -232,8 +234,41 @@ void directionsAroundChar(char** arr, char* word, int row, int col) { // checks 
             directionsAroundChar(arr, word, startingX, startingY);
         }
     }
-} 
+    if (startingY + 1 < bSize && startingX - 1 >= 0 && *(word) != '\0') { // CHECKS BOTTOM LEFT MOST POSITION
+        if (*(word) == *(*arr + (startingY + 1)) + (startingX - 1)) {
+            startingY++;
+            startingX--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
 
+    if (startingY + 1 < bSize && startingX + 1 < bSize && *(word) != '\0') { // CHECKS BOTTOM RIGHT MOST POSITION
+        if (*(word) == *(*(arr + (startingY + 1)) + (startingX + 1))) {
+            startingY++;
+            startingX++;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingY + 1 < bSize && *(word) != '\0') {
+        if (*(word) == *(*(arr + (startingY + 1)) + startingX)) {
+            startingY++;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (*(word) != '\0') {
+        theGreatReset();
+    
+    }
+
+    else {
+        wordFound = 1;
+    }
+}
 
 void initializePath() {
     searchPath = (int**)malloc(bSize * sizeof(int*));
