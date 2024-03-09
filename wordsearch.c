@@ -157,7 +157,7 @@ void startingLetter(char** arr, char* word, int row, int col) {
     }
 }
 
-void createPath(int x, int y) { // creates a makrer if a letter has been found. 
+void createPath(int x, int y) { // creates a marker if a letter has been found. 
     int total = *(*(searchPath + y) + x);
     int temp = 1;
     count++;
@@ -175,7 +175,12 @@ void createPath(int x, int y) { // creates a makrer if a letter has been found.
 }
 
 void finalSearchPath() {
-    char* c = (char*)malloc(strlen(c) + 1);
+    printf("Printing the search path:\n");
+    for (int i = 0; i < bSize; i++) {
+        for (int j = 0; j < bSize; j++) {
+
+        }
+    }
 }
 
 void theGreatReset() {
@@ -193,8 +198,8 @@ void theGreatReset() {
 
 
 void directionsAroundChar(char** arr, char* word, int row, int col) { // checks around chars
-    if (startingX - 1 >= 0 && startingY - 1 >= 0 && *(word) != '\0') { // CHECKS TOPLEFT MOST POSITION
-        if (*(word) == *(*(arr + (startingY - 1)) + (startingX - 1))) {
+    if (startingX - 1 >= 0 && startingY - 1 >= 0 && *(word + count) != '\0') { // CHECKS TOPLEFT MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY - 1)) + (startingX - 1))) {
             startingY--;
             startingX--;
             createPath(startingX, startingY);
@@ -202,8 +207,16 @@ void directionsAroundChar(char** arr, char* word, int row, int col) { // checks 
         }
     }
 
-    if (startingX + 1 < bSize && startingY - 1 >= 0 && *(word) != '\0') { // CHECKS TOPRIGHT MOST POSITION
-        if (*(word) == *(*(arr + (startingY - 1)) + (startingX + 1))) {
+    if (startingY - 1 >= 0 && *(word + count) != '\0') { // CHECKS TOP MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY - 1)) + startingX)) {
+            startingY--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingX + 1 < bSize && startingY - 1 >= 0 && *(word + count) != '\0') { // CHECKS TOPRIGHT MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY - 1)) + (startingX + 1))) {
             startingY--;
             startingX++;
             createPath(startingX, startingY);
@@ -211,40 +224,16 @@ void directionsAroundChar(char** arr, char* word, int row, int col) { // checks 
         }
     }
 
-    if (startingY - 1 >= 0 && *(word) != '\0') { // CHECKS TOP MOST POSITION
-        if (*(word) == *(*(arr + (startingY - 1)) + startingX)) {
-            startingY--;
-            createPath(startingX, startingY);
-            directionsAroundChar(arr, word, startingX, startingY);
-        }
-    }
-
-    if (startingX - 1 >= 0 && *(word) != '\0') { // CHECKS LEFT MOST POSITION
-        if (*(word) == *(*(arr + startingY) + (startingX - 1))) {
-            startingX--;
-            createPath(startingX, startingY);
-            directionsAroundChar(arr, word, startingX, startingY);
-        }
-    }
-
-    if (startingX + 1 < bSize && *(word) != '\0') { // CHECKS RIGHT MOST POSITION
-        if (*(word) == *(*(arr + startingY) + (startingX + 1))) {
+    if (startingX + 1 < bSize && *(word + count) != '\0') { // CHECKS RIGHT MOST POSITION
+        if (*(word + count) == *(*(arr + startingY) + (startingX + 1))) {
             startingX++;
             createPath(startingX, startingY);
             directionsAroundChar(arr, word, startingX, startingY);
         }
     }
-    if (startingY + 1 < bSize && startingX - 1 >= 0 && *(word) != '\0') { // CHECKS BOTTOM LEFT MOST POSITION
-        if (*(word) == *(*arr + (startingY + 1)) + (startingX - 1)) {
-            startingY++;
-            startingX--;
-            createPath(startingX, startingY);
-            directionsAroundChar(arr, word, startingX, startingY);
-        }
-    }
 
-    if (startingY + 1 < bSize && startingX + 1 < bSize && *(word) != '\0') { // CHECKS BOTTOM RIGHT MOST POSITION
-        if (*(word) == *(*(arr + (startingY + 1)) + (startingX + 1))) {
+    if (startingY + 1 < bSize && startingX + 1 < bSize && *(word  + count) != '\0') { // CHECKS BOTTOM RIGHT MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY + 1)) + (startingX + 1))) {
             startingY++;
             startingX++;
             createPath(startingX, startingY);
@@ -252,17 +241,37 @@ void directionsAroundChar(char** arr, char* word, int row, int col) { // checks 
         }
     }
 
-    if (startingY + 1 < bSize && *(word) != '\0') {
-        if (*(word) == *(*(arr + (startingY + 1)) + startingX)) {
+    if (startingY + 1 < bSize && *(word + count) != '\0') { // CHECKS BOTTOM MOST POSTION
+        if (*(word + count) == *(*(arr + (startingY + 1)) + startingX)) {
             startingY++;
             createPath(startingX, startingY);
             directionsAroundChar(arr, word, startingX, startingY);
         }
     }
 
-    if (*(word) != '\0') {
+    if (startingY + 1 < bSize && startingX - 1 >= 0 && *(word + count) != '\0') { // CHECKS BOTTOM LEFT MOST POSITION
+        if (*(word + count) == *(*arr + (startingY + 1)) + (startingX - 1)) {
+            startingY++;
+            startingX--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingX - 1 >= 0 && *(word + count) != '\0') { // CHECKS LEFT MOST POSITION
+        if (*(word + count) == *(*(arr + startingY) + (startingX - 1))) {
+            startingX--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (*(word + count) != '\0') {
         theGreatReset();
-    
+        startingX = initialX;
+        startingY = initialY;
+        createPath(startingX, startingY);
+        ReverseChar(arr, word, startingX, startingY);
     }
 
     else {
@@ -284,7 +293,84 @@ void initializePath() {
 }
 
 void ReverseChar(char** arr, char* word, int row, int col) { // checks backtracking route and around chars
+    if (startingX - 1 >= 0 && *(word + count) != '\0') { // CHECKS LEFT MOST POSITION
+        if (*(word + count) == *(*(arr + startingY) + (startingX - 1))) {
+            startingX--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
     
+    if (startingY + 1 < bSize && startingX - 1 >= 0 && *(word + count) != '\0') { // CHECKS BOTTOM LEFT MOST POSITION
+        if (*(word + count) == *(*arr + (startingY + 1)) + (startingX - 1)) {
+            startingY++;
+            startingX--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingY + 1 < bSize && *(word + count) != '\0') { // CHECKS BOTTOM MOST POSTION
+        if (*(word + count) == *(*(arr + (startingY + 1)) + startingX)) {
+            startingY++;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+    
+    if (startingY + 1 < bSize && startingX + 1 < bSize && *(word + count) != '\0') { // CHECKS BOTTOM RIGHT MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY + 1)) + (startingX + 1))) {
+            startingY++;
+            startingX++;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingX + 1 < bSize && *(word + count) != '\0') { // CHECKS RIGHT MOST POSITION
+        if (*(word + count) == *(*(arr + startingY) + (startingX + 1))) {
+            startingX++;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingX + 1 < bSize && startingY - 1 >= 0 && *(word + count) != '\0') { // CHECKS TOPRIGHT MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY - 1)) + (startingX + 1))) {
+            startingY--;
+            startingX++;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingY - 1 >= 0 && *(word + count) != '\0') { // CHECKS TOP MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY - 1)) + startingX)) {
+            startingY--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (startingX - 1 >= 0 && startingY - 1 >= 0 && *(word + count) != '\0') { // CHECKS TOPLEFT MOST POSITION
+        if (*(word + count) == *(*(arr + (startingY - 1)) + (startingX - 1))) {
+            startingY--;
+            startingX--;
+            createPath(startingX, startingY);
+            directionsAroundChar(arr, word, startingX, startingY);
+        }
+    }
+
+    if (*(word + count) != '\0') {
+        theGreatReset();
+        startingX = initialX;
+        startingY = initialY;
+        startingLetter(arr, word, startingX, startingY);
+    }
+
+    else {
+        wordFound = 1;
+    }
 }
 
 void searchPuzzle(char** arr, char* word) { // parameter points to an aray of pointers, as well as uses the word that user gives.
@@ -296,13 +382,6 @@ void searchPuzzle(char** arr, char* word) { // parameter points to an aray of po
 
     initializePath();
 
-    // Iterate through each cell of the array grid to search common elements
-    for (int i = 0; i < bSize; i++) {
-        *(arr + i) = (char*)malloc(bSize * sizeof(char));
-        for (int j = 0; j < bSize; j++) {
-            if ((*(*(arr + i) + j)) == *word) {
-                count = -1;
-            }
-        }
-    }
+    
+
 }
