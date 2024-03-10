@@ -124,7 +124,7 @@ void toUpperCase(char *word) {
         
     }
 }
-// searches for the starting letter of the word if it exists...
+// searches for the starting letter of the word if it exists 
 void startingLetter(char** arr, char* word, int x, int y) {
     if (startingX == -1 && startingY == -1) {
         for (int i = 0; i < bSize; i++) {
@@ -184,7 +184,7 @@ void startingLetter(char** arr, char* word, int x, int y) {
         }
     }
 }
-
+// Created to make a marker on the specific point within the grid if a letter has been found.
 void createPath(int x, int y) { // creates a marker if a letter has been found. 
     int total = *(*(searchPath + startingY) + startingX);
     int temp = 1;
@@ -201,7 +201,7 @@ void createPath(int x, int y) { // creates a marker if a letter has been found.
     }
     *(*(searchPath + startingY) + startingX) = total;
 }
-
+// prints out the final searchpath.
 void finalSearchPath() {
     printf("Printing the search path:\n");
     for (int i = 0; i < bSize; i++) {
@@ -235,7 +235,7 @@ void finalSearchPath() {
     }
     printf("\n");
 }
-
+// Resets the searchpath if it fails, meant for resetting failed paths.
 void theGreatReset() {
     for (int i = 0; i < bSize; i++) {
         for (int j = 0; j < bSize; j++) {
@@ -247,7 +247,7 @@ void theGreatReset() {
     wordFound = 0;
     count = 0;
 } 
-
+// This search function makes a check on all directions for characters and stores a path indicator/marker
 void directionsAroundChar(char** arr, char* word, int x, int y) { // checks around chars
     if (startingY - 1 >= 0 && startingX - 1 >= 0 && *(word + count) != '\0') { // CHECKS TOPLEFT MOST POSITION
         if (*(word + count) == *(*(arr + (startingY - 1)) + (startingX - 1))) {
@@ -320,20 +320,7 @@ void directionsAroundChar(char** arr, char* word, int x, int y) { // checks arou
         wordFound = 1;
     }
 }
-
-void initializePath() {
-    searchPath = (int**)malloc(bSize * sizeof(int*));
-    for (int i = 0; i < bSize; i++) {
-        *(searchPath + i) = (int*)malloc(bSize * sizeof(int));
-    }
-
-    for (int i = 0; i < bSize; i++) {
-        for (int j = 0; j < bSize; j++) {
-            *(*(searchPath + i) + j) = 0;
-        }
-    }
-}
-
+// This function  was added to check for a backtracking path in case a search path had failed. 
 void ReverseChar(char** arr, char* word, int x, int y) { // checks backtracking route and around chars
     if (startingX - 1 >= 0 && *(word + count) != '\0') { // CHECKS LEFT MOST POSITION
         if (*(word + count) == *(*(arr + startingY) + (startingX - 1))) {
@@ -403,5 +390,18 @@ void ReverseChar(char** arr, char* word, int x, int y) { // checks backtracking 
     }
     else {
         wordFound = 1;
+    }
+}
+
+void initializePath() {
+    searchPath = (int**)malloc(bSize * sizeof(int*));
+    for (int i = 0; i < bSize; i++) {
+        *(searchPath + i) = (int*)malloc(bSize * sizeof(int));
+    }
+
+    for (int i = 0; i < bSize; i++) {
+        for (int j = 0; j < bSize; j++) {
+            *(*(searchPath + i) + j) = 0;
+        }
     }
 }
