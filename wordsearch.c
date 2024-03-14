@@ -136,7 +136,7 @@ void startingLetter(char** arr, char* word, int x, int y) {
                     startingX = j;
                     startingY = i;
 
-                    wordFound++;
+                    wordFound++; //letters instead
                     break;
                 }
                 if (i == bSize - 1 && j == bSize - 1) {
